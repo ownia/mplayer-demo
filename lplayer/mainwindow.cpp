@@ -97,7 +97,6 @@ void MainWindow::buttonClicked()
         if (buffer[2] & 0x01) {
             player->controlCmd("mute 1\n"); //关闭静音
         }
-        if (buffer[3] & 0x02)
 }
 
 
