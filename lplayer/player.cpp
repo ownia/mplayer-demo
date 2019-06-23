@@ -28,9 +28,9 @@ void Player::play(const QString &fileName)
         QStringList args;
         args << tr("-slave");
         args << "-quiet";
-        //args << "-zoom";
+        args << "-zoom";
         //args << "−rootwin";
-        args << "−xy 400";
+        //args << "−xy 400";
         args << tr("-wid") << QString::number(renderTarget->winId());
         args << fileName;
         mplayerProcess->start(tr("/usr/local/bin/mplayer"), args);

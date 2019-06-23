@@ -92,10 +92,13 @@ void MainWindow::buttonClicked()
             player->controlCmd("pause\n");
         }
         if (buffer[1] & 0x01) {
-            player->controlCmd("mute 0\n"); //开启静音
+            player->controlCmd("mute 1\n"); //开启静音
         }
         if (buffer[2] & 0x01) {
-            player->controlCmd("mute 1\n"); //关闭静音
+            player->controlCmd("seek 10 0\n");
+        }
+        if (buffer[3] & 0x01) {
+            player->controlCmd("quit\n");
         }
 }
 
@@ -161,7 +164,7 @@ void MainWindow::slotError(QProcess::ProcessError /*error*/)
 void MainWindow::slotFinished(int /*exitCode*/, QProcess::ExitStatus /*exitStatus*/)
 {
 	//this->showNormal();
-	qDebug() << tr("视频播放完毕，循环播放！");
+        qDebug() << tr("视频播放完毕，循环播放");
 	player->play(currentFileName);
 }
 
