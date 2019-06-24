@@ -23,56 +23,60 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     connect (m_notifier, SIGNAL(activated(int)), this, SLOT(buttonClicked()));
 
     playLabel = new QLabel(this);
-    playLabel->setGeometry(QRect(0, 0, 320, 180));
+    playLabel->setGeometry(QRect(0, 0, 368, 207));
 
     ctlFrame = new QFrame(this);
-    ctlFrame->setGeometry(QRect(5, 210, 470, 55));
+    ctlFrame->setGeometry(QRect(5, 212, 470, 55));
     ctlFrame->setFrameShape(QFrame::StyledPanel);
     ctlFrame->setFrameShadow(QFrame::Raised);
 
     currentlBar = new QSlider(ctlFrame);
-    currentlBar->setGeometry(QRect(10, 0, 180, 18));
+    currentlBar->setGeometry(QRect(10, 0, 335, 18));
     currentlBar->setOrientation(Qt::Horizontal);
     connect(currentlBar, SIGNAL(sliderMoved(int)), this, SLOT(current(int)));
 
     percentLabel = new QLabel(ctlFrame);
-    percentLabel->setGeometry(QRect(195, 2, 40, 18));
+    percentLabel->setGeometry(QRect(350, 2, 40, 14));
 
     timeLabel = new QLabel(ctlFrame);
-    timeLabel->setGeometry(QRect(235, 2, 160, 18));
+    timeLabel->setGeometry(QRect(395, 2, 65, 14));
 
     stopBtn = new QPushButton(QIcon(":/images/stop.png"), "", ctlFrame);
-    stopBtn->setGeometry(QRect(10, 18, 40, 18));
+    stopBtn->setGeometry(QRect(10, 18, 75, 19));
     stopBtn->setEnabled(false);
     connect(stopBtn, SIGNAL(clicked()), this, SLOT(stop()));
 
-    prevBtn = new QPushButton(QIcon(":/images/step.png"), "", ctlFrame);
-    prevBtn->setGeometry(QRect(60, 18, 40, 18));
+    prevBtn = new QPushButton(QIcon(":/images/prev.png"), "", ctlFrame);
+    prevBtn->setGeometry(QRect(90, 18, 75, 19));
     connect(prevBtn, SIGNAL(clicked()), this, SLOT(prev()));
 
     playBtn = new QPushButton(QIcon(":/images/play.png"), "", ctlFrame);
-    playBtn->setGeometry(QRect(110, 18, 55, 18));
+    playBtn->setGeometry(QRect(170, 18, 95, 19));
     playBtn->setEnabled(false);
     connect(playBtn, SIGNAL(clicked()), this, SLOT(pause()));
 
-    nextBtn = new QPushButton(QIcon(":/images/backward.png"), "", ctlFrame);
-    nextBtn->setGeometry(QRect(175, 18, 40, 18));
+    nextBtn = new QPushButton(QIcon(":/images/next.png"), "", ctlFrame);
+    nextBtn->setGeometry(QRect(270, 18, 75, 19));
     connect(nextBtn, SIGNAL(clicked()), this, SLOT(next()));
 
     speedBtn = new QPushButton(QIcon(":/images/speed.png"), "", ctlFrame);
-    speedBtn->setGeometry(QRect(225, 18, 55, 18));
+    speedBtn->setGeometry(QRect(350, 18, 110, 19));
     connect(speedBtn, SIGNAL(clicked()), this, SLOT(setSpeed()));
 
     exitBtn = new QPushButton(QIcon(":/images/exit.png"), "", this);
-    exitBtn->setGeometry(QRect(445, 5, 30, 30));
+    exitBtn->setGeometry(QRect(414, 187, 20, 20));
     connect(exitBtn, SIGNAL(clicked()), this, SLOT(exit()));
+
+    listLabel = new QLabel("播放列表", this);
+    listLabel->setGeometry(373, 267, 102, 30);
 
     voiceLabel = new QLabel(ctlFrame);
     voiceLabel->setPixmap(QPixmap(":/images/voice.png"));
-    voiceLabel->setGeometry(QRect(8, 36, 50, 18));
+    voiceLabel->setGeometry(QRect(10, 38, 17, 19));
+    voiceLabel->setScaledContents(true);
 
     volumeSlider = new QSlider(ctlFrame);
-    volumeSlider->setGeometry(QRect(80, 36, 300, 18));
+    volumeSlider->setGeometry(QRect(33, 37, 357, 18));
     volumeSlider->setOrientation(Qt::Horizontal);
     volumeSlider->setRange(0, 100);
     volumeSlider->setValue(100);
@@ -80,20 +84,20 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     connect(volumeSlider, SIGNAL(sliderMoved(int)), this, SLOT(changeVolume(int)));
 
     volumeLabel = new QLabel(ctlFrame);
-    volumeLabel->setGeometry(QRect(175, 36, 60, 18));
+    volumeLabel->setGeometry(QRect(395, 37, 65, 18));
     volumeLabel->setText(QString::number(100));
 
     playList = new QListWidget(this);
-    playList->setGeometry(QRect(370, 40, 100, 150));
+    playList->setGeometry(QRect(373, 40, 102, 142));
     connect(playList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(playListItem(QListWidgetItem *)));
 
     addBtn = new QPushButton(QIcon(":/images/add.png"), "", this);
-    addBtn->setGeometry(QRect(375, 195, 20, 20));
+    addBtn->setGeometry(QRect(378, 187, 20, 20));
     addBtn->setStyleSheet("border-style:none");
     connect(addBtn, SIGNAL(clicked()), this, SLOT(addItem()));
 
     delBtn = new QPushButton(QIcon(":/images/remove.png"), "", this);
-    delBtn->setGeometry(QRect(435, 195, 20, 20));
+    delBtn->setGeometry(QRect(450, 187, 20, 20));
     delBtn->setStyleSheet("border-style:none");
     connect(delBtn, SIGNAL(clicked()), this, SLOT(delItem()));
 
@@ -119,26 +123,19 @@ void MainWindow::buttonClicked()
             }
         }
         if (buffer[0] & 0x01) {
-            p->write("pause\n");
-        }
-        if (buffer[1] & 0x01) {
             p->write(QString("mute 1\n").toUtf8());
         }
-        if (buffer[2] & 0x01) {
+        if (buffer[1] & 0x01) {
             p->write(QString("mute 0\n").toUtf8());
+        }
+        if (buffer[2] & 0x01) {
+            p->write(QString("exit\n").toUtf8());
         }
         if (buffer[3] & 0x01) {
             p->write(QString("exit\n").toUtf8());
         }
 }
 
-/*************************************************
-
-Function:next
-
-Description:play the next movie/song
-
-*************************************************/
 void MainWindow::next()
 {
     if (playList->count() != 0) {
@@ -153,13 +150,6 @@ void MainWindow::next()
     }
 }
 
-/*************************************************
-
-Function:prev
-
-Description:play the previous movie/song
-
-*************************************************/
 void MainWindow::prev()
 {
     if (playList->count() != 0) {
@@ -174,13 +164,6 @@ void MainWindow::prev()
     }
 }
 
-/*************************************************
-
-Function:addItem
-
-Description:add a item in the playlist
-
-*************************************************/
 void MainWindow::addItem()
 {
     QStringList fileNames = QFileDialog::getOpenFileNames(this, "choose movie/song", "/", "Movie/Song (*.mp4 *.mp3)");
@@ -188,13 +171,6 @@ void MainWindow::addItem()
         playList->addItems(fileNames);
 }
 
-/*************************************************
-
-Function:delItem
-
-Description:delete a item in the playlist
-
-*************************************************/
 void MainWindow::delItem()
 {
     if(playList->currentRow() == -1)
@@ -203,27 +179,12 @@ void MainWindow::delItem()
         playList->takeItem(playList->currentRow());
 }
 
-/*************************************************
-
-Function:playListItem
-
-Description:play a item in the playlist
-
-*************************************************/
 void MainWindow::playListItem(QListWidgetItem *item)
 {
     play(item->text());
     isPlay = 0;
     playBtn->setIcon(QIcon(":/images/pause.png"));
 }
-
-/*************************************************
-
-Function:play
-
-Description:call mplayer to play movie/song
-
-*************************************************/
 
 void MainWindow::play(QString fileName)
 {
@@ -238,9 +199,9 @@ void MainWindow::play(QString fileName)
     args << "-quiet";
     args << "-zoom";
     args << "-x";
-    args << "320";
+    args << "368";
     args << "-y";
-    args << "180";
+    args << "207";
     args << fileName;
     p->start(tr("/usr/local/bin/mplayer"), args);
 
@@ -253,13 +214,6 @@ void MainWindow::play(QString fileName)
     percentLabel->show();
 }
 
-/*************************************************
-
-Function:pause
-
-Description:pause a playing movie/song
-
-*************************************************/
 void MainWindow::pause()
 {
     p->write("pause\n");
@@ -277,13 +231,6 @@ void MainWindow::pause()
 
 }
 
-/*************************************************
-
-Function:stop
-
-Description:stop a playing movie/song
-
-*************************************************/
 void MainWindow::stop()
 {
     p->kill();
@@ -297,26 +244,12 @@ void MainWindow::stop()
     volumeSlider->setEnabled(false);
 }
 
-/*************************************************
-
-Function:changeVolume
-
-Description:change the volume
-
-*************************************************/
 void MainWindow::changeVolume(int v)
 {
     volumeLabel->setText(QString::number(v));
     p->write(QString("volume " + QString::number(v) + " 2\n").toUtf8());
 }
 
-/*************************************************
-
-Function:setSpeed
-
-Description:set the playing speed
-
-*************************************************/
 void MainWindow::setSpeed()
 {
     double speed=QInputDialog::getDouble(this, "set speed", "compare with nomal speed");
@@ -324,13 +257,6 @@ void MainWindow::setSpeed()
         p->write(QString("speed_set " + QString::number(speed) + " 2\n").toUtf8());
 }
 
-/*************************************************
-
-Function:dataRecieve
-
-Description:recieve the data from mplayer
-
-*************************************************/
 void MainWindow::dataRecieve()
 {
     p->write("get_time_length\n");
@@ -345,6 +271,7 @@ void MainWindow::dataRecieve()
         if (b.startsWith("ANS_TIME_POSITION")) {
             currentStr = s.mid(18);
             timeLabel->setText(currentStr + "s");
+            timeLabel->adjustSize();
             currentlBar->setValue(s.mid(18).toFloat());
         }
         else if (b.startsWith("ANS_LENGTH")) {
@@ -354,18 +281,11 @@ void MainWindow::dataRecieve()
         else if(b.startsWith("ANS_PERCENT_POSITION")) {
             currentPercent = s.mid(21);
             percentLabel->setText(currentPercent + "%");
+            percentLabel->adjustSize();
         }
     }
 
 }
-
-/*************************************************
-
-Function:current
-
-Description:get the current process from mplayer
-
-*************************************************/
 
 void MainWindow::current(int value)
 {

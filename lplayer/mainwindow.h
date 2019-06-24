@@ -58,8 +58,8 @@ private:
     int isPlay;
     QSocketNotifier* m_notifier;
     bool m_oldButtonsState[6];
-
     QPushButton *exitBtn;
+    QLabel *listLabel;
 };
 
 #endif // MAINWINDOW_H

@@ -3,12 +3,12 @@
         <file>images/play.png</file>
         <file>images/pause.png</file>
         <file>images/stop.png</file>
-        <file>images/step.png</file>
-        <file>images/backward.png</file>
         <file>images/add.png</file>
         <file>images/remove.png</file>
         <file>images/voice.png</file>
         <file>images/exit.png</file>
         <file>images/speed.png</file>
+        <file>images/prev.png</file>
+        <file>images/next.png</file>
     </qresource>
 </RCC>
