@@ -36,10 +36,10 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     connect(currentlBar, SIGNAL(sliderMoved(int)), this, SLOT(current(int)));
 
     percentLabel = new QLabel(ctlFrame);
-    percentLabel->setGeometry(QRect(350, 2, 40, 14));
+    percentLabel->setGeometry(QRect(350, 1, 40, 14));
 
     timeLabel = new QLabel(ctlFrame);
-    timeLabel->setGeometry(QRect(395, 2, 65, 14));
+    timeLabel->setGeometry(QRect(395, 1, 65, 14));
 
     stopBtn = new QPushButton(QIcon(":/images/stop.png"), "", ctlFrame);
     stopBtn->setGeometry(QRect(10, 18, 75, 19));
@@ -67,12 +67,13 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     exitBtn->setGeometry(QRect(414, 187, 20, 20));
     connect(exitBtn, SIGNAL(clicked()), this, SLOT(exit()));
 
-    listLabel = new QLabel("播放列表", this);
-    listLabel->setGeometry(373, 267, 102, 30);
+    listLabel = new QLabel(this);
+    listLabel->setText("PlayList");
+    listLabel->setGeometry(373, 5, 102, 30);
 
     voiceLabel = new QLabel(ctlFrame);
     voiceLabel->setPixmap(QPixmap(":/images/voice.png"));
-    voiceLabel->setGeometry(QRect(10, 38, 17, 19));
+    voiceLabel->setGeometry(QRect(10, 37, 19, 16));
     voiceLabel->setScaledContents(true);
 
     volumeSlider = new QSlider(ctlFrame);
@@ -84,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     connect(volumeSlider, SIGNAL(sliderMoved(int)), this, SLOT(changeVolume(int)));
 
     volumeLabel = new QLabel(ctlFrame);
-    volumeLabel->setGeometry(QRect(395, 37, 65, 18));
+    volumeLabel->setGeometry(QRect(395, 38, 65, 14));
     volumeLabel->setText(QString::number(100));
 
     playList = new QListWidget(this);
@@ -105,6 +106,7 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
 
 void MainWindow::exit()
 {
+    p->close();
     QApplication* app;
     app->exit(0);
 }
@@ -129,10 +131,10 @@ void MainWindow::buttonClicked()
             p->write(QString("mute 0\n").toUtf8());
         }
         if (buffer[2] & 0x01) {
-            p->write(QString("exit\n").toUtf8());
+            p->write(QString("seek 10\n").toUtf8());
         }
         if (buffer[3] & 0x01) {
-            p->write(QString("exit\n").toUtf8());
+            p->write(QString("seek -10\n").toUtf8());
         }
 }
 
@@ -271,7 +273,6 @@ void MainWindow::dataRecieve()
         if (b.startsWith("ANS_TIME_POSITION")) {
             currentStr = s.mid(18);
             timeLabel->setText(currentStr + "s");
-            timeLabel->adjustSize();
             currentlBar->setValue(s.mid(18).toFloat());
         }
         else if (b.startsWith("ANS_LENGTH")) {
@@ -281,7 +282,6 @@ void MainWindow::dataRecieve()
         else if(b.startsWith("ANS_PERCENT_POSITION")) {
             currentPercent = s.mid(21);
             percentLabel->setText(currentPercent + "%");
-            percentLabel->adjustSize();
         }
     }
 
