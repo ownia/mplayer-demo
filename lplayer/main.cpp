@@ -1,15 +1,12 @@
-#include <QApplication>
-#include <QTextCodec>
-
+#include <QtGui/QApplication>
 #include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
-	QApplication app(argc, argv);
-	QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF8"));
+    QApplication a(argc, argv);
 
-	MainWindow w;
-	w.show();
+    MainWindow *mainwindow = new MainWindow;
+    mainwindow->showFullScreen();
 
-	return app.exec();
+    return a.exec();
 }

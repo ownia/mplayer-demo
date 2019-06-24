@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -30,29 +30,29 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      12,   11,   11,   11, 0x09,
-      23,   11,   11,   11, 0x09,
-      34,   11,   11,   11, 0x09,
-      45,   11,   11,   11, 0x09,
-      60,   11,   11,   11, 0x09,
-      71,   11,   11,   11, 0x09,
-      86,   11,   11,   11, 0x09,
-     106,  100,   11,   11, 0x09,
-     160,  140,   11,   11, 0x09,
-     199,   11,   11,   11, 0x09,
-     217,   11,   11,   11, 0x09,
+      12,   11,   11,   11, 0x08,
+      19,   11,   11,   11, 0x08,
+      26,   11,   11,   11, 0x08,
+      34,   11,   11,   11, 0x08,
+      41,   11,   11,   11, 0x08,
+      52,   11,   11,   11, 0x08,
+      66,   11,   11,   11, 0x08,
+      76,   11,   11,   11, 0x08,
+      86,   11,   11,   11, 0x08,
+      99,   11,   11,   11, 0x08,
+     117,   11,   11,   11, 0x08,
+     148,   11,   11,   11, 0x08,
+     164,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_MainWindow[] = {
-    "MainWindow\0\0slotPlay()\0slotStop()\0"
-    "slotStep()\0slotBackward()\0slotMute()\0"
-    "slotOpenFile()\0slotStarted()\0error\0"
-    "slotError(QProcess::ProcessError)\0"
-    "exitCode,exitStatus\0"
-    "slotFinished(int,QProcess::ExitStatus)\0"
-    "slotBackMessage()\0buttonClicked()\0"
+    "MainWindow\0\0next()\0prev()\0pause()\0"
+    "stop()\0setSpeed()\0dataRecieve()\0"
+    "addItem()\0delItem()\0current(int)\0"
+    "changeVolume(int)\0playListItem(QListWidgetItem*)\0"
+    "buttonClicked()\0exit()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -61,17 +61,19 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         Q_ASSERT(staticMetaObject.cast(_o));
         MainWindow *_t = static_cast<MainWindow *>(_o);
         switch (_id) {
-        case 0: _t->slotPlay(); break;
-        case 1: _t->slotStop(); break;
-        case 2: _t->slotStep(); break;
-        case 3: _t->slotBackward(); break;
-        case 4: _t->slotMute(); break;
-        case 5: _t->slotOpenFile(); break;
-        case 6: _t->slotStarted(); break;
-        case 7: _t->slotError((*reinterpret_cast< QProcess::ProcessError(*)>(_a[1]))); break;
-        case 8: _t->slotFinished((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QProcess::ExitStatus(*)>(_a[2]))); break;
-        case 9: _t->slotBackMessage(); break;
-        case 10: _t->buttonClicked(); break;
+        case 0: _t->next(); break;
+        case 1: _t->prev(); break;
+        case 2: _t->pause(); break;
+        case 3: _t->stop(); break;
+        case 4: _t->setSpeed(); break;
+        case 5: _t->dataRecieve(); break;
+        case 6: _t->addItem(); break;
+        case 7: _t->delItem(); break;
+        case 8: _t->current((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 9: _t->changeVolume((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 10: _t->playListItem((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
+        case 11: _t->buttonClicked(); break;
+        case 12: _t->exit(); break;
         default: ;
         }
     }
@@ -82,7 +84,7 @@ const QMetaObjectExtraData MainWindow::staticMetaObjectExtraData = {
 };
 
 const QMetaObject MainWindow::staticMetaObject = {
-    { &QMainWindow::staticMetaObject, qt_meta_stringdata_MainWindow,
+    { &QWidget::staticMetaObject, qt_meta_stringdata_MainWindow,
       qt_meta_data_MainWindow, &staticMetaObjectExtraData }
 };
 
@@ -100,18 +102,18 @@ void *MainWindow::qt_metacast(const char *_clname)
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_MainWindow))
         return static_cast<void*>(const_cast< MainWindow*>(this));
-    return QMainWindow::qt_metacast(_clname);
+    return QWidget::qt_metacast(_clname);
 }
 
 int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QMainWindow::qt_metacall(_c, _id, _a);
+    _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 13;
     }
     return _id;
 }

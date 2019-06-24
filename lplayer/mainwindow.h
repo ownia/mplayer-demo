@@ -1,62 +1,65 @@
-#ifndef __MAINWINDOW_H_
-#define __MAINWINDOW_H_
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QProcess>
+#include <QtGui>
 
-QT_BEGIN_NAMESPACE
-class QString;
-class QPushButton;
-class QProcess;
-class QHBoxLayout;
-QT_END_NAMESPACE
-
-class Player;
-class QSocketNotifier;
-
-class MainWindow : public QMainWindow
+class MainWindow:public QWidget
 {
-	Q_OBJECT
-
+    Q_OBJECT
 public:
-	MainWindow(QWidget * parent = 0);
-	~MainWindow();
+    void play(QString fileName);
+      MainWindow(QWidget *parent = 0);
 
-protected:
+private slots:
+    void next();
+    void prev();
+    void pause();
+    void stop();
+    void setSpeed();
+    void dataRecieve();
+    void addItem();
+    void delItem();
+    void current(int);
+    void changeVolume(int);
+    void playListItem(QListWidgetItem *);
+    void buttonClicked();
+    void exit();
 
-protected slots:
-        void slotPlay(); 		// 播放
-        void slotStop(); 		// 停止
-        void slotStep(); 		// 步进
-        void slotBackward(); 	// 后退
-        void slotMute(); // 静音
-
-	void slotOpenFile();
-
-	void slotStarted();
-	void slotError(QProcess::ProcessError error);
-	void slotFinished(int exitCode, QProcess::ExitStatus exitStatus);
-	void slotBackMessage();
-
-        void buttonClicked();
 
 private:
-	Player *player;
+    QLabel *playLabel;
+    QLabel *timeLabel;
+    QLabel *percentLabel;
+    QLabel *voiceLabel;
+    QLabel *volumeLabel;
 
-	QPushButton *openFileButton;
-	QPushButton *playButton;
-	QPushButton *stopButton;
-	QPushButton *stepButton;
-	QPushButton *backwardButton;
-	QPushButton *muteButton;
+    QFrame *ctlFrame;
+    QPushButton *playBtn;
+    QPushButton *stopBtn;
+    QPushButton *prevBtn;
+    QPushButton *nextBtn;
+    QPushButton *speedBtn;
 
-	QHBoxLayout *buttonLayout;
+    QSlider *currentlBar;
+    QSlider *volumeSlider;
 
-	QString currentFileName;
+    QListWidget *playList;
+    QPushButton *addBtn;
+    QPushButton *delBtn;
 
-        int m_fd;
-        QSocketNotifier* m_notifier;
-        bool m_oldButtonsState[6];
+    QProcess *p;
+    QString currentStr;
+    QString currentPercent;
+    QString totalTime;
+    QString fileName;
+
+    int m_fd;
+    int isPlay;
+    QSocketNotifier* m_notifier;
+    bool m_oldButtonsState[6];
+
+    QPushButton *exitBtn;
 };
 
-#endif // __MAINWINDOW_H_
+#endif // MAINWINDOW_H

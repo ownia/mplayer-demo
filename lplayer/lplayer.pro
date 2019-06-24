@@ -4,6 +4,6 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += mainwindow.h player.h
-SOURCES += main.cpp mainwindow.cpp player.cpp
+HEADERS += mainwindow.h
+SOURCES += main.cpp mainwindow.cpp
 RESOURCES += resource.qrc
