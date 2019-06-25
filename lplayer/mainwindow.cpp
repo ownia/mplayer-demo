@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     m_notifier = new QSocketNotifier(m_fd, QSocketNotifier::Read, this);
     connect (m_notifier, SIGNAL(activated(int)), this, SLOT(buttonClicked()));
 
+    QFont ft;
+    ft.setPointSize(10);
+
     playLabel = new QLabel(this);
     playLabel->setGeometry(QRect(0, 0, 368, 207));
 
@@ -67,18 +70,15 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     exitBtn->setGeometry(QRect(414, 187, 20, 20));
     connect(exitBtn, SIGNAL(clicked()), this, SLOT(exit()));
 
-    QFont ft;
-    ft.setPointSize(10);
+    listLabel = new QLabel(this);
+    listLabel->setFont(ft);
+    listLabel->setText(tr("欧阳炜钊"));
+    listLabel->setGeometry(373, 4, 102, 15);
 
     listLabel = new QLabel(this);
     listLabel->setFont(ft);
-    listLabel->setText("欧阳炜钊");
-    listLabel->setGeometry(373, 5, 102, 14);
-
-    listLabel = new QLabel(this);
-    listLabel->setFont(ft);
-    listLabel->setText("王雨");
-    listLabel->setGeometry(373, 20, 102, 15);
+    listLabel->setText(tr("王雨"));
+    listLabel->setGeometry(373, 21, 102, 15);
 
     voiceLabel = new QLabel(ctlFrame);
     voiceLabel->setPixmap(QPixmap(":/images/voice.png"));
@@ -115,8 +115,7 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
 
 void MainWindow::exit()
 {
-    if(p!=NULL){
-
+    if(p!=NULL) {
         p->write("quit\n");
         p->kill();
     }
@@ -182,8 +181,6 @@ void MainWindow::prev()
 
 void MainWindow::addItem()
 {
-    isPlay = 0;
-    playBtn->setIcon(QIcon(":/images/pause.png"));
     // QFileDialog *filedialog = new QFileDialog(this);
     // filedialog->setWindowTitle(tr("choose file"));
     // filedialog->setAcceptMode(QFileDialog::AcceptOpen);
@@ -199,19 +196,16 @@ void MainWindow::addItem()
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setGeometry(QRect(0, 0, 480, 272));
     QStringList fileNames;
-    if (dialog.exec())
+    if (dialog.exec()) {
         fileNames = dialog.selectedFiles();
         playList->addItems(fileNames);
-
-    // QStringList fileNames = filedialog->getOpenFileNames(this, "choose file", "/", "movie/song (*.mp4 *.wmv *.mp3)");
-    //if(fileNames.count() != 0)
-      //  playList->addItems(fileNames);
+    }
 }
 
 void MainWindow::delItem()
 {
     if(playList->currentRow() == -1)
-        QMessageBox::warning(this, "note", "not select or playList is null", QMessageBox::Yes);
+        QMessageBox::warning(this, "note", "not select or playlist is null", QMessageBox::Yes);
     else
         playList->takeItem(playList->currentRow());
 }
