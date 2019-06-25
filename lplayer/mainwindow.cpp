@@ -42,21 +42,21 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     timeLabel->setGeometry(QRect(395, 1, 65, 14));
 
     stopBtn = new QPushButton(QIcon(":/images/stop.png"), "", ctlFrame);
-    stopBtn->setGeometry(QRect(10, 18, 75, 19));
+    stopBtn->setGeometry(QRect(10, 18, 80, 19));
     stopBtn->setEnabled(false);
     connect(stopBtn, SIGNAL(clicked()), this, SLOT(stop()));
 
     prevBtn = new QPushButton(QIcon(":/images/prev.png"), "", ctlFrame);
-    prevBtn->setGeometry(QRect(90, 18, 75, 19));
+    prevBtn->setGeometry(QRect(95, 18, 80, 19));
     connect(prevBtn, SIGNAL(clicked()), this, SLOT(prev()));
 
     playBtn = new QPushButton(QIcon(":/images/play.png"), "", ctlFrame);
-    playBtn->setGeometry(QRect(170, 18, 95, 19));
+    playBtn->setGeometry(QRect(180, 18, 80, 19));
     playBtn->setEnabled(false);
     connect(playBtn, SIGNAL(clicked()), this, SLOT(pause()));
 
     nextBtn = new QPushButton(QIcon(":/images/next.png"), "", ctlFrame);
-    nextBtn->setGeometry(QRect(270, 18, 75, 19));
+    nextBtn->setGeometry(QRect(265, 18, 80, 19));
     connect(nextBtn, SIGNAL(clicked()), this, SLOT(next()));
 
     speedBtn = new QPushButton(QIcon(":/images/speed.png"), "", ctlFrame);
@@ -67,9 +67,18 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     exitBtn->setGeometry(QRect(414, 187, 20, 20));
     connect(exitBtn, SIGNAL(clicked()), this, SLOT(exit()));
 
+    QFont ft;
+    ft.setPointSize(10);
+
     listLabel = new QLabel(this);
-    listLabel->setText("PlayList");
-    listLabel->setGeometry(373, 5, 102, 30);
+    listLabel->setFont(ft);
+    listLabel->setText("欧阳炜钊");
+    listLabel->setGeometry(373, 5, 102, 14);
+
+    listLabel = new QLabel(this);
+    listLabel->setFont(ft);
+    listLabel->setText("王雨");
+    listLabel->setGeometry(373, 20, 102, 15);
 
     voiceLabel = new QLabel(ctlFrame);
     voiceLabel->setPixmap(QPixmap(":/images/voice.png"));
@@ -106,7 +115,12 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
 
 void MainWindow::exit()
 {
-    p->close();
+    if(p!=NULL){
+
+        p->write("quit\n");
+        p->kill();
+    }
+    p=NULL;
     QApplication* app;
     app->exit(0);
 }
@@ -168,9 +182,30 @@ void MainWindow::prev()
 
 void MainWindow::addItem()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this, "choose movie/song", "/", "Movie/Song (*.mp4 *.mp3)");
-    if(fileNames.count() != 0)
+    isPlay = 0;
+    playBtn->setIcon(QIcon(":/images/pause.png"));
+    // QFileDialog *filedialog = new QFileDialog(this);
+    // filedialog->setWindowTitle(tr("choose file"));
+    // filedialog->setAcceptMode(QFileDialog::AcceptOpen);
+    // filedialog->setViewMode(QFileDialog::List);
+    // filedialog->setGeometry(0, 0, 480, 272);
+    // filedialog->setDirectory(".");
+    // filedialog->setFilter(tr("movie/song (*.mp4 *.mp3)"));
+    // filedialog->setFileMode(QFileDialog::ExistingFiles);
+    // QStringList fileNames;
+    // filedialog->setHistory(fileNames);
+
+    QFileDialog dialog(this, "choose file", "", "movie/song (*.mp4 *.wmv *.mp3);;all files (*.*)");
+    dialog.setFileMode(QFileDialog::ExistingFiles);
+    dialog.setGeometry(QRect(0, 0, 480, 272));
+    QStringList fileNames;
+    if (dialog.exec())
+        fileNames = dialog.selectedFiles();
         playList->addItems(fileNames);
+
+    // QStringList fileNames = filedialog->getOpenFileNames(this, "choose file", "/", "movie/song (*.mp4 *.wmv *.mp3)");
+    //if(fileNames.count() != 0)
+      //  playList->addItems(fileNames);
 }
 
 void MainWindow::delItem()
@@ -254,6 +289,8 @@ void MainWindow::changeVolume(int v)
 
 void MainWindow::setSpeed()
 {
+    isPlay = 0;
+    playBtn->setIcon(QIcon(":/images/pause.png"));
     double speed=QInputDialog::getDouble(this, "set speed", "compare with nomal speed");
     if(speed > 0)
         p->write(QString("speed_set " + QString::number(speed) + " 2\n").toUtf8());

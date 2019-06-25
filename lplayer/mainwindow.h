@@ -60,6 +60,7 @@ private:
     bool m_oldButtonsState[6];
     QPushButton *exitBtn;
     QLabel *listLabel;
+    QLabel *listLabel2;
 };
 
 #endif // MAINWINDOW_H
