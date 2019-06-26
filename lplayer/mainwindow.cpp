@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     m_notifier = new QSocketNotifier(m_fd, QSocketNotifier::Read, this);
     connect (m_notifier, SIGNAL(activated(int)), this, SLOT(buttonClicked()));
 
+    // db->addDatabase("QSQLITE");
+    // db->setDatabaseName("/home/plg/code/list.db");
+
     QFont ft;
     ft.setPointSize(10);
 
@@ -67,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     connect(speedBtn, SIGNAL(clicked()), this, SLOT(setSpeed()));
 
     exitBtn = new QPushButton(QIcon(":/images/exit.png"), "", this);
-    exitBtn->setGeometry(QRect(414, 187, 20, 20));
+    exitBtn->setGeometry(QRect(426, 187, 20, 20));
     connect(exitBtn, SIGNAL(clicked()), this, SLOT(exit()));
 
     listLabel = new QLabel(this);
@@ -111,6 +114,9 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     delBtn->setStyleSheet("border-style:none");
     connect(delBtn, SIGNAL(clicked()), this, SLOT(delItem()));
 
+    sqlBtn = new QPushButton(QIcon(":/images/sql.png"), "", this);
+    sqlBtn->setGeometry(QRect(402, 187, 20, 20));
+    connect(sqlBtn, SIGNAL(clicked()), this, SLOT(sql_list()));
 }
 
 void MainWindow::exit()
@@ -196,9 +202,15 @@ void MainWindow::addItem()
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setGeometry(QRect(0, 0, 480, 272));
     QStringList fileNames;
+    // QSqlQuery sql_query;
     if (dialog.exec()) {
         fileNames = dialog.selectedFiles();
         playList->addItems(fileNames);
+        // sql_query.exec("SELECT MAX(ID) FROM list;");
+        // int id = sql_query.value(0).toInt() + 1;
+        // QString filename = playList->currentItem()->text();
+        // QString list = "INSERT INFO list VALUES (" + QString::number(id) + ", " + filename + ")";
+        // sql_query.exec(list);
     }
 }
 
@@ -321,4 +333,19 @@ void MainWindow::dataRecieve()
 void MainWindow::current(int value)
 {
     p->write(QString("seek " + QString::number(value) + " 2\n").toUtf8());
+}
+
+void MainWindow::sql_list()
+{
+    int ret;
+    char *str;
+    ret = sqlite3_open("./list.db", &db);
+    // QString n = "SELECT MAX(ID) FROM list";
+    // const char *sql = n.toAscii().constData();
+    // value = sqlite3_exec(db, sql, searchId, NULL, &str);
+    // int id = value + 1;
+    QString filename = playList->currentItem()->text();
+    QString list = "INSERT INFO list VALUES (1, " + filename + ")";
+    const char *sql = list.toAscii().constData();
+    sqlite3_exec(db, sql, 0, 0, &str);
 }

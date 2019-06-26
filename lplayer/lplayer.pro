@@ -1,7 +1,7 @@
 TEMPLATE = app
-TARGET = 
-DEPENDPATH += .
-INCLUDEPATH += .
+TARGET =
+QT += sql
+LIBS += -L/home/ownia/source \-lsqlite3
 
 # Input
 HEADERS += mainwindow.h

@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      13,   14, // methods
+      14,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -43,6 +43,7 @@ static const uint qt_meta_data_MainWindow[] = {
      117,   11,   11,   11, 0x08,
      148,   11,   11,   11, 0x08,
      164,   11,   11,   11, 0x08,
+     171,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -52,7 +53,7 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "stop()\0setSpeed()\0dataRecieve()\0"
     "addItem()\0delItem()\0current(int)\0"
     "changeVolume(int)\0playListItem(QListWidgetItem*)\0"
-    "buttonClicked()\0exit()\0"
+    "buttonClicked()\0exit()\0sql_list()\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -74,6 +75,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 10: _t->playListItem((*reinterpret_cast< QListWidgetItem*(*)>(_a[1]))); break;
         case 11: _t->buttonClicked(); break;
         case 12: _t->exit(); break;
+        case 13: _t->sql_list(); break;
         default: ;
         }
     }
@@ -111,9 +113,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 13)
+        if (_id < 14)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 13;
+        _id -= 14;
     }
     return _id;
 }

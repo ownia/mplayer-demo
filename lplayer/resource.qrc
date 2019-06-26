@@ -10,5 +10,6 @@
         <file>images/speed.png</file>
         <file>images/prev.png</file>
         <file>images/next.png</file>
+        <file>images/sql.png</file>
     </qresource>
 </RCC>

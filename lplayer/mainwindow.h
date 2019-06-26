@@ -3,6 +3,15 @@
 
 #include <QMainWindow>
 #include <QtGui>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlQueryModel>
+#include <QSqlError>
+
+extern "C"
+{
+    #include "sqlite3.h"
+}
 
 class MainWindow:public QWidget
 {
@@ -25,6 +34,7 @@ private slots:
     void playListItem(QListWidgetItem *);
     void buttonClicked();
     void exit();
+    void sql_list();
 
 
 private:
@@ -61,6 +71,9 @@ private:
     QPushButton *exitBtn;
     QLabel *listLabel;
     QLabel *listLabel2;
+    // QSqlDatabase *db;
+    sqlite3 *db;
+    QPushButton *sqlBtn;
 };
 
 #endif // MAINWINDOW_H
