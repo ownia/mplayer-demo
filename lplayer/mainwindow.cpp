@@ -22,8 +22,21 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     m_notifier = new QSocketNotifier(m_fd, QSocketNotifier::Read, this);
     connect (m_notifier, SIGNAL(activated(int)), this, SLOT(buttonClicked()));
 
-    // db->addDatabase("QSQLITE");
-    // db->setDatabaseName("/home/plg/code/list.db");
+    // qdb->addDatabase("QSQLITE");
+    // qdb->setDatabaseName("./list.db");
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName("/opt/test.db");
+    if (!m_db.open())
+    {
+       qDebug() << "Error: connection with database fail";
+    }
+    else
+    {
+       qDebug() << "Database: connection ok";
+    }
+
+    sqlshow = new QLabel(this);
+    sqlshow->setGeometry(QRect(0, 0, 200, 100));
 
     QFont ft;
     ft.setPointSize(10);
@@ -271,7 +284,6 @@ void MainWindow::pause()
         isPlay = 1;
         playBtn->setIcon(QIcon(":/images/play.png"));
     }
-
 }
 
 void MainWindow::stop()
@@ -295,11 +307,14 @@ void MainWindow::changeVolume(int v)
 
 void MainWindow::setSpeed()
 {
-    isPlay = 0;
-    playBtn->setIcon(QIcon(":/images/pause.png"));
+    QEventLoop loop;
+    QTimer::singleShot(10, &loop, SLOT(quit()));
+    p->write("pause\n");
+    loop.exec();
     double speed=QInputDialog::getDouble(this, "set speed", "compare with nomal speed");
     if(speed > 0)
         p->write(QString("speed_set " + QString::number(speed) + " 2\n").toUtf8());
+    loop.exec();
 }
 
 void MainWindow::dataRecieve()
@@ -337,15 +352,39 @@ void MainWindow::current(int value)
 
 void MainWindow::sql_list()
 {
-    int ret;
-    char *str;
-    ret = sqlite3_open("./list.db", &db);
+    // int ret;
+    // char *str;
+    // ret = sqlite3_open("./list.db", &db);
     // QString n = "SELECT MAX(ID) FROM list";
     // const char *sql = n.toAscii().constData();
     // value = sqlite3_exec(db, sql, searchId, NULL, &str);
     // int id = value + 1;
-    QString filename = playList->currentItem()->text();
-    QString list = "INSERT INFO list VALUES (1, " + filename + ")";
-    const char *sql = list.toAscii().constData();
-    sqlite3_exec(db, sql, 0, 0, &str);
+    // QString filename = playList->currentItem()->text();
+    // QString list = "INSERT INFO list VALUES (1, " + filename + ")";
+    // const char *sql = list.toAscii().constData();
+    // sqlite3_exec(db, sql, 0, 0, &str);
+
+    /* --correct code--
+    bool success = false;
+    QString name = playList->currentItem()->text();
+    QSqlQuery query;
+    query.prepare("INSERT INTO people (name) VALUES (:name)");
+    query.bindValue(":name", name);
+    if(query.exec())
+    {
+        success = true;
+    }
+    else
+    {
+         qDebug() << "addPerson error:  "
+                  << query.lastError();
+    }
+    */
+
+    QSqlQuery query("SELECT * FROM people");
+    // int columnNum = query.record().count();
+    int id = query.value(0).toInt();
+    QString name = query.value(1).toString();
+    sqlshow->setText(QString::number(id) + " " + name + "\n");
+    QMessageBox::warning(this, "note", QString::number(id) + " " + name + "\n", QMessageBox::Yes);
 }

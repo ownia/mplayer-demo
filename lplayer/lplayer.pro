@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET =
 QT += sql
-LIBS += -L/home/ownia/source \-lsqlite3
+# LIBS += -L/home/ownia/source \-lsqlite3
 
 # Input
 HEADERS += mainwindow.h
