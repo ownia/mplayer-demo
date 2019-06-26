@@ -18,5 +18,8 @@ compiler目录包含需要通过`arm-linux-gcc`编译的三个库
 compiler/
 ├── libid3tag-0.15.1b
 ├── libmad-0.15.1b
-└── MPlayer-1.0rc3
+├── MPlayer-1.0rc3
+└── sqlite-autoconf-3280000
 ```
+
+`./setqt4env`是设置Qt4程序环境变量的脚本

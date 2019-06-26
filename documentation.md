@@ -48,8 +48,7 @@ QGtkStyle was unable to detect the current GTK+ theme.
 ```
 编译安装
 ```
-make CC=arm-linux-gcc
-make CC=arm-linux-gcc install
+make && make install
 ```
 
 编译libmad-0.15.1b
@@ -59,8 +58,7 @@ make CC=arm-linux-gcc install
 ```
 编译安装
 ```
-make CC=arm-linux-gcc
-make CC=arm-linux-gcc install
+make && make install
 ```
 编译libmad-0.15.1b时
 要在Makefile中删除-fforce-mem
@@ -88,7 +86,7 @@ ownia@ownia-PC:/usr/local/arm/4.5.1$ tree
 ```
 编译
 ```
-make CC=arm-linux-gcc
+make
 ```
 在目录下生成mplayer
 ```
@@ -105,3 +103,14 @@ mplayer$(EXESUF): $(MPLAYER_DEPS)
 mplayer$(EXESUF): $(MPLAYER_DEPS)
 	$(CC) -o $@ $^ $(LDFLAGS_MPLAYER) -lrt
 ```
+
+移植sqlite
+配置configure(--prefix为交叉编译后生成的文件路径)
+```
+./configure CC=arm-linux-gcc --host=arm-linux --prefix=/home/ownia/usr/
+```
+编译
+```
+make && make install
+```
+将编译后生成的文件对应的复制到开发板的`/usr/bin`和`/usr/lib`目录中
