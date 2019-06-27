@@ -419,14 +419,14 @@ void MainWindow::sql_list()
         index = nColumn;
         qDebug() << QString::number(index);
         sqlshow0->setText(QString::number(index) + " files\n");
-        QMessageBox::information(this, "sqlite", QString::number(index) + "\n", QMessageBox::Yes);
         for( i = 0; i < nRow ; i++ ) {
             qDebug() << QString::number(i + 1);
             for( j = 0 ; j < nColumn; j++ ) {
                 qDebug() << dbResult[j];
                 qDebug() << dbResult[index];
                 QString text = dbResult[j];
-                QMessageBox::information(this, "sqlite", text + " - " + dbResult[index] + "\n", QMessageBox::Yes);
+                QString sqlindex = dbResult[index];
+                QMessageBox::information(this, "sqlite", text + " \n" + sqlindex + "\n", QMessageBox::Yes);
                 ++index;
             }
         }
