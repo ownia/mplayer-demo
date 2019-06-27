@@ -385,6 +385,6 @@ void MainWindow::sql_list()
     // int columnNum = query.record().count();
     int id = query.value(0).toInt();
     QString name = query.value(1).toString();
-    sqlshow->setText(QString::number(id) + " " + name + "\n");
-    QMessageBox::warning(this, "note", QString::number(id) + " " + name + "\n", QMessageBox::Yes);
+    sqlshow->setText("ok.");
+    QMessageBox::information(this, "sqlite", QString::number(id) + " " + name + "\n", QMessageBox::Yes);
 }
