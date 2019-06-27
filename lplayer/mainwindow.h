@@ -72,10 +72,14 @@ private:
     QLabel *listLabel;
     QLabel *listLabel2;
     // QSqlDatabase *qdb;
-    // sqlite3 *db;
+    sqlite3 *db;
     QPushButton *sqlBtn;
-    QSqlDatabase m_db;
-    QLabel *sqlshow;
+    // QSqlDatabase m_db;
+    QLabel *sqlshow0;
+    QLabel *sqlshow1;
+    QLabel *sqlshow2;
+    QLabel *sqlshow3;
+    QLabel *sqlshow4;
 };
 
 #endif // MAINWINDOW_H

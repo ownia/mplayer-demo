@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
 
     // qdb->addDatabase("QSQLITE");
     // qdb->setDatabaseName("./list.db");
+
+    /*
     m_db = QSqlDatabase::addDatabase("QSQLITE");
     m_db.setDatabaseName("/opt/test.db");
     if (!m_db.open())
@@ -34,9 +36,12 @@ MainWindow::MainWindow(QWidget *parent) :QWidget(parent)
     {
        qDebug() << "Database: connection ok";
     }
+    */
 
-    sqlshow = new QLabel(this);
-    sqlshow->setGeometry(QRect(0, 0, 200, 100));
+
+
+    sqlshow0 = new QLabel(this);
+    sqlshow0->setGeometry(QRect(0, 0, 200, 100));
 
     QFont ft;
     ft.setPointSize(10);
@@ -139,6 +144,7 @@ void MainWindow::exit()
         p->kill();
     }
     p=NULL;
+    sqlite3_close(db);
     QApplication* app;
     app->exit(0);
 }
@@ -309,7 +315,6 @@ void MainWindow::setSpeed()
 {
     QEventLoop loop;
     QTimer::singleShot(10, &loop, SLOT(quit()));
-    p->write("pause\n");
     loop.exec();
     double speed=QInputDialog::getDouble(this, "set speed", "compare with nomal speed");
     if(speed > 0)
@@ -381,10 +386,65 @@ void MainWindow::sql_list()
     }
     */
 
+    /*
     QSqlQuery query("SELECT * FROM people");
     // int columnNum = query.record().count();
     int id = query.value(0).toInt();
+    qDebug() << QString::number(id);
     QString name = query.value(1).toString();
+    qDebug() << name;
     sqlshow->setText("ok.");
     QMessageBox::information(this, "sqlite", QString::number(id) + " " + name + "\n", QMessageBox::Yes);
+    */
+
+    int result = sqlite3_open("/opt/test.db", &db);
+    if(result != SQLITE_OK) {
+        qDebug() << "open database failed.";
+    } else {
+        qDebug() << "open database succeed.";
+    }
+    char * errmsg = NULL;
+    char **dbResult;
+    int nRow, nColumn;
+    int i, j, index;
+
+    // QString filename = playList->currentItem()->text();
+    // QString list = "insert into people VALUES (" + filename + ")";
+    // QByteArray data = list.toLatin1();
+    // const char * file = data.data();
+    // result = sqlite3_exec( db, file, 0, 0, &errmsg);
+    result = sqlite3_get_table( db, "select * from people", &dbResult, &nRow,&nColumn, &errmsg );
+    if( SQLITE_OK == result )
+    {
+        index = nColumn;
+        qDebug() << QString::number(index);
+        sqlshow0->setText(QString::number(index) + " files\n");
+        QMessageBox::information(this, "sqlite", QString::number(index) + "\n", QMessageBox::Yes);
+        for( i = 0; i < nRow ; i++ ) {
+            qDebug() << QString::number(i + 1);
+            for( j = 0 ; j < nColumn; j++ ) {
+                qDebug() << dbResult[j];
+                qDebug() << dbResult[index];
+                QString text = dbResult[j];
+                QMessageBox::information(this, "sqlite", text + " - " + dbResult[index] + "\n", QMessageBox::Yes);
+                ++index;
+            }
+        }
+        qDebug() << "-------\n";
+    }
+    sqlite3_free_table(dbResult);
+    // sqlite3_exec(db,"select * from people", LoadMyInfo, NULL, errmsg);
 }
+
+/*
+int LoadMyInfo( void * para, int n_column, char ** column_value, char ** column_name )
+{
+    int i;
+    qDebug() << QString::number(n_column);
+    for( i = 0 ; i < n_column; i ++ )
+    {
+        qDebug() << column_value[i];
+    }
+    return 0;
+}
+*/
