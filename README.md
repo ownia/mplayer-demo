@@ -4,6 +4,8 @@
 
 详细介绍在`./documentation.md`
 
+软件界面截图在`./img`
+
 mini210s配套LCD型号为HSD043I9W1
 > This TFT LCD has a 4.3 (16:9) inch diagonally measured active
 display area with WQVGA (480 horizontal by 272 vertical pixel) resolution
